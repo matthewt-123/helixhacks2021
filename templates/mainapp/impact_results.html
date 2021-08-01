@@ -1,0 +1,60 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+<table width='100%'>
+    <thead>
+        <tr>
+            <td>
+                <b>
+                    Team Name
+                </b>
+            </td>
+            <td>
+                <b>
+                    Zip Code
+                </b>
+            </td>
+            <td>
+                <b>
+                    Next Event
+                </b>
+            </td>
+            <td>
+                <b>
+                    Next Location
+                </b>
+            </td>
+        </tr>
+    </thead>
+    {% for local_team in local_teams %}
+    <tr>
+        <td>
+            
+            <a href="/team?id={{local_team.0.id}}">
+                {{local_team.0.team_name}}
+            </a>
+        </td>
+        <td>
+            <a href="/team?id={{local_team.0.id}}">
+                {{local_team.0.zip_code}}
+            </a>
+        </td>
+        <td>
+            <a href='/event?id={{local_team.1.0.id}}'>
+            {{local_team.1.0.event_name}}
+            </a>
+        </td>
+        <td>
+                <a href='/event?id={{local_team.1.0.id}}'>
+                {{local_team.1.0.address}}
+                </a>
+        </td>
+    </tr>
+
+{% endfor %}
+</table>
+<hr>
+<button onclick="document.location='/addteam'" class='btn btn-primary'>Add New Team</button>
+
+{% endblock %}
+

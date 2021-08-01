@@ -1,5 +1,33 @@
 {% extends "mainapp/layout.html" %}
 
 {% block body %}
-hello world
+<style>
+    body {
+        background-color: white;
+        animation-name: body;
+        transition: background-color, 2s, ease-out;
+    }
+
+</style>
+<table>
+    <tr>
+        Enter Zip Code to Begin
+    </tr>
+    <tr>
+        <td>
+            <form method="GET" action='lookup'>
+                <label style="display:none;" for="Zip Code">Zip Code</label><input name="zipcode" type="text">
+            </form>
+        </td>
+    </tr>
+</table>
+<hr>
+<table id="data" width="100%">
+    <tr>
+        <td width='33%'>column 1</td>
+        <td width='33%'>column 2</td>
+        <td width='33%'>column 3</td>
+    </tr>
+</table>
 {% endblock %}
+

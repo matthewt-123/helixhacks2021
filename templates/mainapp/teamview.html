@@ -1,0 +1,101 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+{% if error %}
+<div class="alert alert-danger" role="alert">
+{{error}}  
+</div>
+{% endif %}
+<div class='row'>
+  <div id='team' class='column'>
+    <table>
+      <thead>
+        <tr>
+            <td>
+                <b style="font-size: 30px;">
+                    Teammates
+                </b>
+            </td>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        
+        <tr>
+            <td style='text-align: center;'>
+                <a href="about?id={{member.id}}">
+                    {{member.username}}
+                </a>                
+            </td>
+            <td id="event_id_{{ forloop.counter0 }}" class='event_class'>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <div id='events' class='column'>
+    <table>
+    <thead>
+      <tr>
+        <td>
+          <b style="font-size: 30px;">
+              Events
+          </b>
+      </td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <td>
+          <a href='/event?id={{event.id}}'>{{event.event_name}}</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+  </div>
+</div>
+
+<form action='/addevent'>
+</form>
+<hr>
+{% if edit %}
+  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Invite Others To Your Team
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Invite Link</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Invite Link:<br> <a href='{{link}}'>
+              {{link}}
+          </a>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class='btn btn-primary' onclick="document.location='/addevent?id={{team.id}}'">Create an Event</button>
+  {% endif %}
+<style>
+.row {
+  display: flex;
+}
+.column {
+  flex:1;
+}
+</style>
+{% endblock %}

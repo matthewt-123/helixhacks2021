@@ -1,0 +1,10 @@
+{% extends "mainapp/layout.html" %}
+{% block title %}Success!{% endblock %}
+
+
+
+{% block body %}
+<div class="alert alert-success" role="alert">
+{{message|safe}}    
+</div>
+{% endblock %}

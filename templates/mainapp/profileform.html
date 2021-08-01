@@ -1,0 +1,17 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+{% if error %}
+<div class="alert alert-danger" role="alert">
+{{error}}  
+</div>
+{% endif %}
+<h2 style='text-align: center;'>{{header}}</h2>
+    <form action="/profile" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <table style='margin-left: 35%;'>
+            {{form.as_table}}
+        </table>
+        <button style='margin-left: 35%' type='submit' class='btn btn-primary'>Submit</button>
+    </form>
+{% endblock %}

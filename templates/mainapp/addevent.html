@@ -1,0 +1,15 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+<h2 style='text-align: center;'>Add Event For {{team.team_name}}</h2>
+<hr>
+<form action='/addevent?id={{team_id}}' method="POST">
+{% csrf_token %}
+<table style='margin-left: 35%'>
+    {{form.as_table}}
+</table>
+<button type='submit' style='margin-left: 35%' class='btn btn-primary'>Submit</button>
+</form>
+
+{% endblock %}
+

@@ -1,0 +1,63 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+<div class='alert alert-danger' style='display:none;'>
+</div>
+<table style='margin-left: 35%;font-size: 20px;'>
+    <tr>
+        <td>
+            <b>Name: </b>{{event.event_name}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Date: </b>{{event.date}} {{event.time}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Address: </b>{{event.address}}<br> {{event.city}} {{event.zip_code}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Description: </b>{{event.description}}
+        </td>
+    </tr>
+
+</table>
+{% csrf_token %}
+{% if registered %}
+<button style='margin-left: 35%;' id='register' onclick='register()' class='btn btn-primary'>Cancel Registration</button>
+{% else %}
+<button  style='margin-left: 35%;' id='register' onclick='register()'  class='btn btn-primary'>Register</button>
+{% endif %}
+<script>
+    function register() {
+        fetch(`/event`, {
+            method:'POST',
+            headers: {
+                'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                "updated": 1,
+                "event": {{event.id}}
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            if(result['status']==200) {
+                document.getElementById('register').innerHTML = result['inner']
+            } else {
+                var err = document.getElementById('error')
+                err.style.display = block;
+                err.innerHTML = result['message']
+
+            }
+        })
+    }
+
+</script>
+{% endblock %}
+

@@ -25,7 +25,7 @@ SECRET_KEY = 'ek2r=$f9d9xzzbdr5qf+1c1uu!*9=phqms8u8qfpdls)i5d11s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mainapp'
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -122,3 +124,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'mainapp/static'),
 )
+AUTH_USER_MODEL = 'mainapp.User'
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
+
+MEDIA_URL = 'media/'

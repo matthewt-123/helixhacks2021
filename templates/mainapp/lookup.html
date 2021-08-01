@@ -1,0 +1,42 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+
+<div>
+    <b>Air Quality for {{zipcode}}</b>
+    <span class="dot" style="text-align: center">
+        <p style="text-align: center;margin-top: 25px;font-size: 30px;">
+            {{aqi_val}}
+        </p>
+    </span>
+</div>
+<table>
+    <thead>
+        <tr>
+            <td>
+                <b>Last Updated</b>
+            </td>
+        </tr>
+    </thead>
+    {% for fire in fires %}
+    <tr>
+        <td>
+
+        </td>
+    </tr>
+    <tr><td>{{fire}}</td></tr>
+    {% endfor %}
+</table>
+
+
+<style>
+    .dot {
+        height: 100px;
+        width: 100px;
+        background-color: {{color}};
+        border-radius: 50%;
+        display: inline-block;
+    }
+</style>
+{% endblock %}
+

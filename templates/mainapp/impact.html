@@ -1,0 +1,32 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+
+<style type="text/css">
+    .tab { 
+        margin-left: 40px; font-size: 20px;
+    }
+    body {
+        background-image: url('/static/mainapp/earth_bg.png');
+        background-position: center;
+        background-position-y: 10%;
+    }
+</style>
+<div class = 'tab'>
+   <br> Enter your ZIP code to find others near you who care about the environment! <br>
+       To create or join a team, please enter your name, age, a picture of yourself, and a short biography to find teammates you can work with. <br> <br>
+       Some ways you can make an impact together are: <br>
+  
+       <ul>
+           <li>Picking up trash in your neighborhood <br></li>
+           <li>Organizing or attending a protest for environmental action <br></li>
+           <li>Spreading awareness through social media projects, putting up posters, or sending out flyers <br> <br></li>
+       </ul>
+    <form action="/impact" method='POST'>
+        {% csrf_token %}
+        <label for="Zip Code">Zip Code:&nbsp;</label><input type="text" name="zipcode">
+        </form>
+</div>
+
+{% endblock %}
+

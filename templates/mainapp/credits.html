@@ -1,0 +1,53 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+body {
+  background-image: url('/static/mainapp/polar_bear.png');
+  background-position: center;
+  background-position-y: 0;
+}
+tr:nth-child(even) {
+  background-color: white;
+}
+tr:nth-child(odd) {
+  background-color: rgb(219,219,219);
+}
+</style>
+</head>
+<body>
+
+<h2 style="text-align: center;">Sources</h2>
+
+
+<table style="width:50%;margin-left: 25%;">
+  <thead>
+    <tr><td width=50% style='margin-left: 25%;'></td></tr>
+  </thead>
+  <tr>
+    <td width=50% style='margin-left: 25%;'><a href="https://www.fema.gov/">FEMA.gov</a></td>
+ 
+  </tr>
+  <tr>
+    <td><a href="https://www.mapbox.com/">MapBox</a></td>
+
+  </tr>
+  <tr>
+    <td><a href="https://www.breezometer.com/">BreezoMeter</a></td>
+
+  </tr>
+  <tr>
+    <td><a href="https://www.instagram.com/p/BvC9jBMHME3/?utm_source=ig_embed&ig_rid=1edd23a0-1df9-47c2-ac86-8dee174fb3cc">New York Times</a></td>
+
+</tr>
+<tr>
+  <td><a href="https://www.youtube.com/watch?v=FWsM9-_zrKo">Guardian News</a></td> 
+
+  </tr>
+</table>
+
+{% endblock %}
+

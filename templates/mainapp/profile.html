@@ -1,0 +1,22 @@
+{% extends "mainapp/layout.html" %}
+
+{% block body %}
+<h2>About {{profile.about_user.username}}</h2><hr>
+<table>
+<tr>
+    <td width=50%>
+        <img style="height:50%;width: 50%;display: block;" src='/{{MEDIA_URL}}{{profile.image}}' alt='profile pic for {{profile.first_name}}'>
+    </td>
+    <td style='font-size: 25px;' width='50%'>
+        <b>Name: </b>{{profile.first_name}}<br><br>
+        <b>My Email: </b><a href='mailto:{{profile.about_user.email}}'>{{profile.about_user.email}}</a><br><br>
+        <b>Age: </b>{{profile.age}}<br><br>
+        <b>Zip Code: </b>{{profile.zip_code}}<br><br>
+        <b>About Me: </b><p style="font-size: 20px;">{{profile.self_blurb}}</p>
+    </td>
+
+</tr>
+</table>
+
+{% endblock %}
+
