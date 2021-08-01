@@ -7,7 +7,6 @@ import os
 from django.db import IntegrityError
 from .models import User, Team, AboutMe, Event
 from dotenv import load_dotenv
-import requests
 import json
 from .forms import TeamForm, AboutForm, EventForm
 from django.contrib.auth.decorators import login_required
@@ -80,43 +79,6 @@ def register(request):
     else:
         return render(request, "mainapp/register.html")
 
-def lookup(request):
-    try:
-        zipcode = request.GET.get('zipcode')
-        zip = int(zipcode)
-        len(str(zip)) == 5
-    except:
-        return JsonResponse({
-            "error": "invalid US zip code"
-        })
-    url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{zip}.json?access_token={os.environ.get('mapbox_private')}"
-    response = requests.get(url)
-    formatted = json.loads(response.text)
-    coordinates = formatted['features'][0]['center']
-    url = f"https://api.breezometer.com/fires/v1/current-conditions?lat={coordinates[1]}&lon={coordinates[0]}&key={os.environ.get('breezometer_fire')}&radius=50"
-    response = requests.get(url)
-    formatted = json.loads(response.text)
-    if formatted['data'] == 'false':
-        return JsonResponse({"error": "BreezoMeter Fire Error"})
-    fires = formatted['data']['fires']
-    features = "breezometer_aqi,local_aqi"
-    url = f"https://api.breezometer.com/air-quality/v2/current-conditions?lat={coordinates[1]}&lon={coordinates[0]}&key={os.environ.get('breezometer_fire')}&features={features}&breezometer_aqi_color=indiper_dark"
-    response = requests.get(url)
-    formatted = json.loads(response.text)
-    color = formatted['data']['indexes']['baqi']['color']
-    print(color)
-    print(formatted['data']['indexes']['usa_epa'])
-    if formatted['data'] == 'false':
-        return JsonResponse({"error": "BreezoMeter AQI Error"})
-    aqi = formatted['data']['indexes']['usa_epa']
-    aqi_val = aqi['aqi']
-    return render(request, 'mainapp/lookup.html', {
-        "fires": fires,
-        "aqi": aqi,
-        "color": color,
-        'aqi_val': aqi_val,
-        "zipcode": zipcode
-    })
 
 def environmental_impact(request):
     return render(request, "mainapp/env_impact.html")
@@ -136,7 +98,6 @@ def impact(request):
                     except:
                         next_ev = None
                     local.append([team, next_ev])
-        print(local[0][1][0].id)
         return render(request, "mainapp/impact_results.html", {
             "local_teams": local,
         })
@@ -166,7 +127,7 @@ def addteam(request):
             AboutMe.objects.get(about_user=request.user)
         except:
             return render(request, 'mainapp/error.html', {
-                "error": "Please complete your profile at <a href='/profile'>this link</a>"
+                "error": "Please complete your profile at <a href='/profile?next=/addteam'>this link</a>"
             })
         form = TeamForm()
         return render(request, 'mainapp/teamform.html', {
@@ -225,6 +186,9 @@ def profile(request):
             })
         new_profile = AboutMe(about_user=request.user, first_name=first_name, age=age, image=image, self_blurb=self_blurb, zip_code=zip_code)
         new_profile.save()
+        next = request.GET.get('next')
+        if next:
+            return HttpResponseRedirect(next)
         return HttpResponseRedirect(reverse('index'))
     else:
         form = AboutForm()
@@ -243,11 +207,8 @@ def invite(request):
             })
         id = request.GET.get('id')
         hash_val = request.GET.get('hash')
-        print(hash(str(id)))
         if id==None or hash_val==None:
             return HttpResponseRedirect(reverse('index'))
-        print(hash(str(id)))
-        print(str(hash_val))
         if str(hash(str(id))) == str(hash_val):
             team = Team.objects.get(id=id)
             team.teammate.add(request.user)
@@ -257,7 +218,7 @@ def invite(request):
                 'error': 'Invalid link'
             })
         return render(request, 'mainapp/success.html', {
-            'message': f"Success! You have joined {team.team_name}"
+            'message': f"Success! You have joined <a href='/team?id={id}'>{team.team_name}</a>"
         })
     except:
         return HttpResponseRedirect(reverse('index'))
@@ -268,6 +229,7 @@ def addevent(request):
         form = EventForm(request.POST)
         if form.is_valid():
             event_name = form.cleaned_data['event_name']
+            date = form.cleaned_data['date']
             time = form.cleaned_data['time']
             address = form.cleaned_data['address']
             city = form.cleaned_data['city']
@@ -279,7 +241,7 @@ def addevent(request):
             return render(request,'mainapp/error.html', {
                 'error': 'Access Denied: You are not in this team!!'
             })
-        n_event = Event(time=time, address=address, zip_code=zip_code, description=description, city=city, event_name=event_name, team=team)
+        n_event = Event(time=time, address=address, zip_code=zip_code, description=description, city=city, event_name=event_name, team=team, date=date)
         n_event.save()
         n_event.attendees.add(request.user)
         n_event.save()
@@ -312,13 +274,15 @@ def event_details(request):
         event = Event.objects.get(id=e_id)
         if request.user in event.attendees.all():
             inner = "Register"
+            add = False
             event.attendees.remove(request.user)
             event.save()
         else:
             inner = "Cancel Registration"
+            add=True
             event.attendees.add(request.user)
             event.save()
-        return JsonResponse({"message": "success", 'status': 200, "inner": inner}, status=200)
+        return JsonResponse({"message": "success", 'status': 200, "inner": inner, 'id': request.user.id, 'add': add, 'username': request.user.username}, status=200)
     else:
         id = request.GET.get('id')
         if id is None:

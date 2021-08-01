@@ -24,6 +24,19 @@
             <b>Description: </b>{{event.description}}
         </td>
     </tr>
+    <tr>
+        <td>
+            <b>Attendees: </b><br>
+            <ul id='attendee_list'>
+                {% for attendee in event.attendees.all %}
+                <li id='a_{{attendee.id}}'>
+                    {{attendee}}
+                </li>
+                {% endfor %}
+            </ul>
+
+        </td>
+    </tr>
 
 </table>
 {% csrf_token %}
@@ -48,7 +61,13 @@
         .then(response => response.json())
         .then(result => {
             if(result['status']==200) {
-                document.getElementById('register').innerHTML = result['inner']
+                document.getElementById('register').innerHTML = result['inner'];
+                if(result['add']==true) {
+                    document.getElementById('attendee_list').innerHTML += `<li id='a_${result['id']}>${result['username']}</li>'`
+                } else {
+                    document.getElementById(`a_${result['id']}`).remove()
+
+                }
             } else {
                 var err = document.getElementById('error')
                 err.style.display = block;

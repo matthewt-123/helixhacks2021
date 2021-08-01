@@ -6,7 +6,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("", views.environmental_impact, name="index"),
-    path("lookup", views.lookup, name='lookup'),
     path("environment", views.environmental_impact, name="environmental_impact"),
     path("impact", views.impact, name="impact"),
     path("credits", views.credits, name='credits'),
@@ -19,7 +18,7 @@ urlpatterns = [
     path("profile", views.profile, name="profile"),
     path("invite", views.invite, name='invite'),
     path("addevent", views.addevent, name='addevent'),
-    path('event', views.event_details, name='event_details')
+    path('event', views.event_details, name='event_details'),
     
 ]
 if settings.DEBUG:

@@ -1,11 +1,11 @@
 {% extends "mainapp/layout.html" %}
 
 {% block body %}
-<h2>About {{profile.about_user.username}}</h2><hr>
+<h2 style='text-align: center;'>About {{profile.about_user.username}}</h2><hr>
 <table>
 <tr>
     <td width=50%>
-        <img style="height:50%;width: 50%;display: block;" src='/{{MEDIA_URL}}{{profile.image}}' alt='profile pic for {{profile.first_name}}'>
+        <img style="height:50%;width: 50%;display: block;margin-left: auto;margin-right: auto;" src='/{{MEDIA_URL}}{{profile.image}}' alt='profile pic for {{profile.first_name}}'>
     </td>
     <td style='font-size: 25px;' width='50%'>
         <b>Name: </b>{{profile.first_name}}<br><br>
